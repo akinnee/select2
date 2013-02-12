@@ -1237,15 +1237,19 @@ the specific language governing permissions and limitations under the Apache Lic
             }
 
             if (search.val().length < opts.minimumInputLength) {
+                this.dropdown.addClass('select2-too-short');
                 if (checkFormatter(opts.formatInputTooShort, "formatInputTooShort")) {
-                    render("<li class='select2-no-results'>" + opts.formatInputTooShort(search.val(), opts.minimumInputLength) + "</li>");
+                    render("<li class='select2-no-results select2-too-short'>" + opts.formatInputTooShort(search.val(), opts.minimumInputLength) + "</li>");
                 } else {
                     render("");
                 }
                 return;
             }
-            else if (opts.formatSearching()) {
-                render("<li class='select2-searching'>" + opts.formatSearching() + "</li>");
+            else {
+                this.dropdown.removeClass('select2-too-short');
+                if (opts.formatSearching()) {
+                    render("<li class='select2-searching'>" + opts.formatSearching() + "</li>");
+                }
             }
 
             // give the tokenizer a chance to pre-process the input
@@ -1283,8 +1287,11 @@ the specific language governing permissions and limitations under the Apache Lic
                 }
 
                 if (data.results.length === 0 && checkFormatter(opts.formatNoMatches, "formatNoMatches")) {
-                    render("<li class='select2-no-results'>" + opts.formatNoMatches(search.val()) + "</li>");
+                    this.dropdown.addClass('select2-no-matches');
+                    render("<li class='select2-no-results select2-no-matches'>" + opts.formatNoMatches(search.val()) + "</li>");
                     return;
+                } else {
+                    this.dropdown.removeClass('select2-no-matches');
                 }
 
                 results.empty();
