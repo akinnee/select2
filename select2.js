@@ -67,6 +67,7 @@ the specific language governing permissions and limitations under the Apache Lic
         END: 35,
         BACKSPACE: 8,
         DELETE: 46,
+        COMMA: 188,
         isArrow: function (k) {
             k = k.which ? k.which : k;
             switch (k) {
@@ -1886,6 +1887,13 @@ the specific language governing permissions and limitations under the Apache Lic
                         this.selectHighlighted();
                         killEvent(e);
                         return;
+                    case KEY.COMMA:
+                        // if this.opts.selectEmailOnComma == true and search string looks like an email, comma does the same thing as enter
+                        if (this.opts.selectEmailOnComma && this.search.val().match(/.*@.*\..*/)) {
+                            this.selectHighlighted();
+                            killEvent(e);
+                        }
+                        return;
                     case KEY.ESC:
                         this.cancel(e);
                         killEvent(e);
@@ -2439,7 +2447,8 @@ the specific language governing permissions and limitations under the Apache Lic
             return markup;
         },
         blurOnChange: false,
-        selectOnBlur: false
+        selectOnBlur: false,
+        selectEmailOnComma: false
     };
 
     // exports
